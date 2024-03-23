@@ -21,12 +21,12 @@ class ContactBase(BaseModel):
     last_name: str = Field(max_length=20)
     email: EmailStr = Field(max_length=50)
     birth_date: PastDate
-    info: str | None
+    info: Optional[str] = None
 
 
 class ContactResponse(ContactBase):
     id: int
-    phones: List[PhoneResponse]
+    phones: List[PhoneResponse] = []
 
     class Config:
         orm_mode = True

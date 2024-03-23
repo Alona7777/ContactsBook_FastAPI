@@ -11,7 +11,6 @@ class Contact(Base):
     first_name: Mapped[str] = mapped_column(String(15), index=True)
     last_name: Mapped[str] = mapped_column(String(20))
     email: Mapped[str] = mapped_column(String(50), unique=True)
-    # phone_number: Mapped[int] = mapped_column()
     birth_date: Mapped[Date] = mapped_column(Date)
     info: Mapped[str] = mapped_column(String(100), nullable=True)
 
@@ -20,7 +19,7 @@ class PhoneNumber(Base):
     __tablename__ = 'phones'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    phone: Mapped[int] = mapped_column(Integer(12), unique=True, nullable=False)
+    phone: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
 
 class ContactPhone(Base):
     __tablename__ = 'contacts_phons'
