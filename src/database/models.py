@@ -22,7 +22,7 @@ class PhoneNumber(Base):
     phone: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
 
 class ContactPhone(Base):
-    __tablename__ = 'contacts_phons'
+    __tablename__ = 'contacts_phones'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     contact_id: Mapped[int] = mapped_column(Integer, ForeignKey('contacts.id', ondelete='CASCADE'), nullable=False)

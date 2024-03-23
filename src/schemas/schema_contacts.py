@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field, EmailStr, PastDate
+from pydantic import BaseModel, Field, EmailStr, PastDate, conint
 
 
 
@@ -10,7 +10,7 @@ class PhoneBase(BaseModel):
 
 
 class PhoneResponse(PhoneBase):
-    id: int
+    id: int = conint(ge=1)
 
     class Config:
         orm_mode = True
@@ -25,7 +25,7 @@ class ContactBase(BaseModel):
 
 
 class ContactResponse(ContactBase):
-    id: int
+    id: int = conint(ge=1)
     phones: List[PhoneResponse] = []
 
     class Config:

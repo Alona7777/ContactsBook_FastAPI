@@ -35,6 +35,9 @@ async def create_contact(body: ContactBase, body_phone:PhoneBase, db: Session) -
     contact_phone = ContactPhone(
         contact_id=contact_id, 
         phone_id=phone_id)
+    db.add(contact_phone)
+    db.commit()
+    db.refresh(contact_phone)
     return contact, phone, contact_phone
 
 
