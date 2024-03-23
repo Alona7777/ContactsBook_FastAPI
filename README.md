@@ -21,3 +21,5 @@ Project description
 3) Install packages:
 
     ```poetry install```
+
+4) Run main.py

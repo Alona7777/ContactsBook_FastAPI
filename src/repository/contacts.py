@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from src.database.models import Contact, PhoneNumber, ContactPhone
-from src.schemas.schema_contacts import ContactBase, ContactResponse
+from src.schemas.schema_contacts import ContactBase, ContactResponse, PhoneBase
 
 
 async def get_contacts(skip: int, limit: int, db: Session) -> List[Contact]:
@@ -14,7 +14,7 @@ async def get_contact(contact_id: int, db: Session) -> Contact:
     return db.query(Contact).filter(Contact.id == contact_id).first()
 
 
-async def create_contact(body: ContactBase, db: Session) -> Contact:
+async def create_contact(body: ContactBase, body_phone:PhoneBase, db: Session) -> Contact:
     contact = Contact(
         first_name = body.first_name,
         last_name = body.last_name,
@@ -26,7 +26,16 @@ async def create_contact(body: ContactBase, db: Session) -> Contact:
     db.add(contact)
     db.commit()
     db.refresh(contact)
-    return contact
+    contact_id = db.query(Contact).filter(Contact.email == contact.email).first().id
+    phone = PhoneNumber(phone=body_phone.phone)
+    db.add(phone)
+    db.commit()
+    db.refresh(phone)
+    phone_id = db.query(PhoneNumber).filter(PhoneNumber.phone == phone.phone)
+    contact_phone = ContactPhone(
+        contact_id=contact_id, 
+        phone_id=phone_id)
+    return contact, phone, contact_phone
 
 
 
