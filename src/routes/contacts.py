@@ -1,11 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Path
 from sqlalchemy.orm import Session
 
 from src.database.db import get_db
 
-from src.schemas.schema_contacts import ContactBase, ContactResponse, PhoneBase
+from src.schemas.contacts import ContactBase, ContactResponse
 from src.repository import contacts as repository_contacts
 
 
@@ -16,29 +16,22 @@ async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(g
     contacts = await repository_contacts.get_contacts(skip, limit, db)
     return contacts
 
-@router.get('/{contact_id}', response_model=ContactResponse)
-async def read_contact(contact_id: int, db: Session = Depends(get_db)):
-    contact = await repository_contacts.get_contact(contact_id, db)
+
+
+@router.get('/{contact_name}', response_model=ContactResponse)
+async def read_contacts_by_name(contact_name: str = Path(..., title="Contact Name", description="Name of the contact"), db: Session = Depends(get_db)):
+    contact = await repository_contacts.get_contacts_by_name(contact_name, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Contact not found')
     return contact
 
-@router.post('/', response_model=ContactResponse)
-async def create_contact(body: ContactBase, body_phone:PhoneBase, db: Session = Depends(get_db)):
-    return await repository_contacts.create_contact(body, body_phone, db)
-
-@router.put('/{contact_id}', response_model=ContactResponse)
-async def update_contact(body: ContactBase, contact_id: int, db: Session = Depends(get_db)):
-    contact = await repository_contacts.update_contact(contact_id, body, db)
+@router.get('/{contact_last_name}',response_model=List[ContactResponse])
+async def read_contacts_by_last_name(contact_last_name: str, db: Session = Depends(get_db)):
+    contact = await repository_contacts.get_contacts_by_last_name(contact_last_name, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Contact not found')
     return contact
 
-@router.delete('/{contact_id}', response_model=ContactResponse)
-async def remove_contact(contact_id: int, db: Session = Depends(get_db)):
-    contact = await repository_contacts.remove_contact(contact_id, db)
-    if contact is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Contact not found')
-    return contact
+
 
 
