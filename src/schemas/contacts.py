@@ -8,7 +8,7 @@ PhoneNumber = type(
     "PhoneNumberStr",
     (PydanticPhoneNumber,),
     {   
-        "default_region_code": "IN",
+        "default_region_code": "US",
         "phone_format": "E164",
     },
 )

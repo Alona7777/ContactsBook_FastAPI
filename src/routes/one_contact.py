@@ -17,8 +17,9 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Contact not found')
     return contact
 
-@router.get('/{contact_email}', response_model=ContactResponse)
-async def read_contacts_by_name(contact_email: str = Path(..., title='Contact Name', description='Email of the contact'), db: Session = Depends(get_db)):
+# @router.get('/{contact_email}', response_model=ContactResponse)
+@router.get("/search", response_model=ContactResponse)
+async def read_contact_by_email(contact_email: str = Path(..., title='Contact Email', description='Email of the contact'), db: Session = Depends(get_db)):
     contact = await one_contact.get_contact_by_email(contact_email, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Contact not found')
