@@ -38,6 +38,41 @@ async def update_contact(contact_id: int, body: ContactBase, db: Session) -> Con
     return contact
 
 
+async def update_name(contact_id: int, first_name: str, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.first_name = first_name,
+        db.commit()
+    return contact
+
+async def update_last_name(contact_id: int, last_name: str, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.last_name = last_name,
+        db.commit()
+    return contact
+
+async def update_email(contact_id: int, email: str, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.email = email,
+        db.commit()
+    return contact
+
+async def update_phone(contact_id: int, phone: str, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.phone = phone,
+        db.commit()
+    return contact
+
+async def update_info(contact_id: int, info: str, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.info = info,
+        db.commit()
+    return contact
+
 async def remove_contact(contact_id: int, db: Session)  -> Contact | None:
     contact = db.query(Contact).filter(Contact.id == contact_id).first()
     if contact:
