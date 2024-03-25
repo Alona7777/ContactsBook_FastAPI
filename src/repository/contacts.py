@@ -10,8 +10,6 @@ async def get_contacts(skip: int, limit: int, db: Session) -> List[Contact]:
     return db.query(Contact).offset(skip).limit(limit).all()
 
 
-
-
 async def get_contacts_by_name(contact_name: str, db: Session) -> Contact:
     return db.query(Contact).filter(Contact.first_name == contact_name).first()
 

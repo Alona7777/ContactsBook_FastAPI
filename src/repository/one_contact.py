@@ -6,6 +6,9 @@ from src.schemas.contacts import ContactBase, ContactResponse
 async def get_contact(contact_id: int, db: Session) -> Contact:
     return db.query(Contact).filter(Contact.id == contact_id).first()
 
+async def get_contact_by_email(contact_email: str, db: Session) -> Contact:
+    return db.query(Contact).filter(Contact.email == contact_email).first()
+
 
 async def create_contact(body: ContactBase, db: Session) -> Contact:
     contact = Contact(
