@@ -26,6 +26,7 @@ class ContactBase(BaseModel):
 
 class ContactResponse(ContactBase):
     id: int = 1
+    user_id: int
 
     class Config:
         from_attributes = True

@@ -3,6 +3,9 @@
         "asyncpg",
         "conint",
         "fastapi",
-        "psycopg"
+        "healthchecker",
+        "passlib",
+        "psycopg",
+        "starlette"
     ]
 }
