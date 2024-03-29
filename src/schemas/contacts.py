@@ -3,6 +3,8 @@ from typing import List, Optional
 from pydantic import BaseModel, Field, EmailStr, PastDate, validator
 from pydantic_extra_types.phone_numbers import PhoneNumber as PydanticPhoneNumber
 
+from src.schemas.user import UserResponse
+
 
 PhoneNumber = type(
     "PhoneNumberStr",
@@ -23,10 +25,17 @@ class ContactBase(BaseModel):
     info: Optional[str] = None
 
 
-
 class ContactResponse(ContactBase):
     id: int = 1
-    user_id: int
+    user_id: int | None
+
+    class Config:
+        from_attributes = True
+
+
+class ContactResponseAdmin(ContactBase):
+    id: int = 1
+    user: UserResponse | None
 
     class Config:
         from_attributes = True

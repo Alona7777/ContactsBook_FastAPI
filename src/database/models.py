@@ -1,5 +1,6 @@
+import enum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import String, Date, Integer, ForeignKey, DateTime, func
+from sqlalchemy import String, Date, Integer, ForeignKey, DateTime, func, Enum
 
 
 class Base(DeclarativeBase):
@@ -20,6 +21,11 @@ class Contact(Base):
     user: Mapped['User'] = relationship(backref='contact', lazy='joined')
 
 
+class Role(enum.Enum):
+    admin: str = 'admin'
+    moderator: str = 'moderator'
+    user: str = 'user'
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -30,5 +36,5 @@ class User(Base):
     refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)
     created_at: Mapped[Date] = mapped_column(Date, default=func.now())
     updated_at: Mapped[Date] = mapped_column(Date, default=func.now(), onupdate=func.now())
-
+    role: Mapped[Enum] = mapped_column(Enum(Role), default=Role.user)
 

@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
 
-from src.routes import contacts, one_contact, auth
+from src.routes import contacts, one_contact, auth, full_access
 
 from src.schemas.contacts import ContactResponse
 from src.database.db import get_db
@@ -15,6 +15,7 @@ app = FastAPI()
 app.include_router(auth.router, prefix='/api')
 app.include_router(contacts.router, prefix='/api')
 app.include_router(one_contact.router, prefix='/api')
+app.include_router(full_access.router, prefix='/api')
 
 
 @app.get('/')

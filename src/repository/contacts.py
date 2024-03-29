@@ -5,7 +5,6 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from src.database.models import Contact, User
-from src.schemas.contacts import ContactBase, ContactResponse
 
 
 async def get_contacts(skip: int, limit: int, user: User, db: Session) -> List[Contact]:

@@ -1,6 +1,7 @@
 from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel, Field, EmailStr
+from src.database.models import Role
 
 
 
@@ -14,6 +15,7 @@ class UserResponse(BaseModel):
     id: int = 1
     username: str 
     email: str
+    role: Role
 
     class Config:
         from_attributes = True
