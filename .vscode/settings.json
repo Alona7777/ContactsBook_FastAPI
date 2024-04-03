@@ -4,7 +4,9 @@
         "conint",
         "fastapi",
         "healthchecker",
+        "libgravatar",
         "passlib",
+        "phonenumbers",
         "psycopg",
         "starlette"
     ]
