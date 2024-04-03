@@ -22,10 +22,20 @@ async def signup(body: UserBase, bt: BackgroundTasks, request: Request, db: Sess
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Account already exists')
     body.password = auth_service.get_password_hash(body.password)
     new_user = await repository_users.create_user(body, db)
-    bt.add_task(send_email, new_user.email, new_user.username, request.base_url)
+    bt.add_task(send_email, new_user.email, new_user.username, str(request.base_url))
 
-    # return new_user
-    return {'user': new_user, 'detail': 'User successfully created. Check your email for confirmation.'}
+    return new_user
+    # return {'user': new_user, 'detail': 'User successfully created. Check your email for confirmation.'}
+
+# @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+# async def signup(body: UserBase,bt: BackgroundTasks, request: Request, db: Session = Depends(get_db)):
+#     exist_user = await repository_users.get_user_by_email(body.email, db)
+#     if exist_user:
+#         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Account already exists")
+#     body.password = auth_service.get_password_hash(body.password)
+#     new_user = await repository_users.create_user(body, db)
+#     bt.add_task(send_email, new_user.email, new_user.username, str(request.base_url))
+#     return new_user
 
 
 @router.post('/login', response_model=TokenBase)
