@@ -1,4 +1,3 @@
-import certifi
 from pathlib import Path
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
@@ -7,7 +6,6 @@ from pydantic import EmailStr
 
 from src.services.auth import auth_service
 
-# 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
 
 # certificate = certifi.where()
 conf = ConnectionConfig(
