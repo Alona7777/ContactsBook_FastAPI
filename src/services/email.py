@@ -36,7 +36,7 @@ conf = ConnectionConfig(
 # )
 # conf = ConnectionConfig(
 #     MAIL_USERNAME="apikey",
-#     MAIL_PASSWORD="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",
+#     MAIL_PASSWORD=,
 #     MAIL_FROM="contactsbook_fastapi@yahoo.com",
 #     MAIL_PORT=465,
 #     MAIL_SERVER="smtp.sendgrid.net", 
