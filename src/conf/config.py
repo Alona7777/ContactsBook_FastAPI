@@ -1,7 +1,13 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
+
 
 
 class Settings(BaseSettings):
+    db_name: str
+    db_user: str
+    db_password: str
+    db_port: str
+
     sqlalchemy_database_url: str
     secret_key: str
     algorithm: str
@@ -21,7 +27,7 @@ class Settings(BaseSettings):
     mail_sg_port: int
     mail_sg_server: str
     redis_host: str = 'localhost'
-    redis_port: int = 6379
+    redis: int = 6379
 
     class Config:
         env_file = ".env"

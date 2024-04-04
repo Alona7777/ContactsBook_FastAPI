@@ -24,6 +24,7 @@ fastapi-mail = "^1.4.1"
 libgravatar = "^1.0.4"
 certifi = "^2024.2.2"
 python-dotenv = "^1.0.1"
+pydantic-settings = "^2.2.1"
 
 
 [build-system]
