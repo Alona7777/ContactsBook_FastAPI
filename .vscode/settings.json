@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "asyncpg",
+        "ASYNG",
         "conint",
         "fastapi",
         "healthchecker",
