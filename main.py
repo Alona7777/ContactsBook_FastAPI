@@ -45,13 +45,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.middleware("http")
-# async def ban_ips(request: Request, call_next: Callable):
-#     ip = ip_address(request.client.host)
-#     if ip in banned_ips:
-#         return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content={"detail": "You are banned"})
-#     response = await call_next(request)
-#     return response
 
 user_agent_ban_list = [r"Googlebot", r"Python-urllib"]
 
@@ -78,14 +71,6 @@ app.include_router(one_contact.router, prefix='/api')
 app.include_router(full_access.router, prefix='/api')
 
 
-
-
-# templates = Jinja2Templates(directory='src/templates')
-
-
-# @app.get('/', response_class=HTMLResponse)
-# def read_root(request: Request):
-#     return templates.TemplateResponse('idex.html', {'request': request})
 
 @app.get('/')
 def read_root():

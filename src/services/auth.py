@@ -1,3 +1,5 @@
+import redis
+import pickle
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -19,6 +21,12 @@ class Auth:
     SECRET_KEY = config.SECRET_KEY
     ALGORITHM = config.ALGORITHM
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl='api/auth/login')
+    cache = redis.Redis(
+        host=config.REDIS_HOST,
+        port=config.REDIS_PORT,
+        db=0,
+        password=config.REDIS_PASSWORD,
+    )
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -73,9 +81,16 @@ class Auth:
         except JWTError as e:
             raise credentials_exception
         
-        user = await repository_users.get_user_by_email(email, db)
+        user_hash = str(email)
+        user = self.cache.get(user_hash)
         if user is None:
-            raise credentials_exception
+            user = await repository_users.get_user_by_email(email, db)
+            if user is None:
+                raise credentials_exception
+            self.cache.set(user_hash, pickle.dumps(user))
+            self.cache.expire(user_hash, 300)
+        else:
+            user = pickle.loads(user)
         return user
     
     def create_email_token(self, data: dict):
