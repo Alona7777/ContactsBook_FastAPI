@@ -22,4 +22,10 @@ Project description
 
     ```poetry install```
 
-4) Run main.py
+4) Run docker compose:
+    ```docker compose up -d```
+
+5) Run migrations:
+    ```alembic upgrade heads```
+
+6) Run main.py

@@ -10,14 +10,14 @@ from jose import JWTError, jwt
 from src.database.db import get_db
 from src.database.models import User
 from src.repository import users as repository_users
-from src.conf.config import settings
+from src.conf.config import config
 
 
 class Auth:
 
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-    SECRET_KEY = settings.secret_key
-    ALGORITHM = settings.algorithm
+    SECRET_KEY = config.SECRET_KEY
+    ALGORITHM = config.ALGORITHM
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl='api/auth/login')
 
     def verify_password(self, plain_password, hashed_password):

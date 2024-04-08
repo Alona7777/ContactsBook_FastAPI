@@ -2,13 +2,16 @@
     "cSpell.words": [
         "asyncpg",
         "ASYNG",
+        "autoflush",
         "conint",
         "fastapi",
+        "Googlebot",
         "healthchecker",
         "libgravatar",
         "passlib",
         "phonenumbers",
         "psycopg",
-        "starlette"
+        "starlette",
+        "templating"
     ]
 }
