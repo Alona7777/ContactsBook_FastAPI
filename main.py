@@ -2,6 +2,7 @@ import uvicorn
 import re
 import redis.asyncio as redis
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,7 +20,15 @@ from src.database.models import Contact
 from src.conf.config import config
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    r = await redis.Redis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD)
+    await FastAPILimiter.init(r)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
 
 banned_ips = [
     ip_address("192.168.1.1"),
@@ -68,10 +77,7 @@ app.include_router(contacts.router, prefix='/api')
 app.include_router(one_contact.router, prefix='/api')
 app.include_router(full_access.router, prefix='/api')
 
-@app.on_event('startup')
-async def startup():
-    r = await redis.Redis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD)
-    await FastAPILimiter.init(r)
+
 
 
 # templates = Jinja2Templates(directory='src/templates')
@@ -102,7 +108,7 @@ async def healthchecker(db: Session = Depends(get_db)):
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host="localhost",
+        host="0.0.0.0",
         port=8000,
         reload=True
     )
