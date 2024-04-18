@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List, Optional
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from src.database.models import Role
 
 
@@ -18,8 +18,9 @@ class UserResponse(BaseModel):
     avatar: str | None
     role: Role
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes = True)
+    # class Config:
+    #     from_attributes = True
 
 
 class TokenBase(BaseModel):

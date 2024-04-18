@@ -24,6 +24,19 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    The send_email function sends an email to the user with a link to verify their account.
+        The function takes in three parameters:
+            - email: the user's email address, as a string.
+            - username: the user's username, as a string.  This is used for personalization of the message body and subject line.
+            - host: this is used for personalization of the message body and subject line.
+    
+    :param email: EmailStr: Specify the email address of the recipient
+    :param username: str: Pass the username to the template
+    :param host: str: Pass the host url to the email template
+    :return: A coroutine, which is an object that can be executed by the asyncio event loop
+    :doc-author: Trelent
+    """
     try: 
         token_verification = auth_service.create_email_token({'sub': email})
         message = MessageSchema(
