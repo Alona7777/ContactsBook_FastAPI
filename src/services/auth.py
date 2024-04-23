@@ -16,7 +16,26 @@ from src.conf.config import config
 
 
 class Auth:
+    """
+    A class containing methods for authentication and authorization.
 
+    Attributes:
+        pwd_context (CryptContext): An instance of CryptContext for password hashing.
+        SECRET_KEY (str): Secret key used for JWT encoding and decoding.
+        ALGORITHM (str): Algorithm used for JWT encoding and decoding.
+        oauth2_scheme (OAuth2PasswordBearer): An instance of OAuth2PasswordBearer for token authentication.
+        cache (Redis): An instance of Redis for caching user data.
+
+    Methods:
+        verify_password: Verify if a plain password matches a hashed password.
+        get_password_hash: Get the hashed version of a password.
+        create_access_token: Create an access token for a user.
+        create_refresh_token: Create a refresh token for a user.
+        decode_refresh_token: Decode a refresh token and extract the email address.
+        get_current_user: Get the current authenticated user from the token.
+        create_email_token: Create a token for email verification.
+        get_email_from_token: Get the email address from an email verification token.
+    """
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
     SECRET_KEY = config.SECRET_KEY
     ALGORITHM = config.ALGORITHM

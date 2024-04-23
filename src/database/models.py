@@ -14,10 +14,10 @@ class Contact(Base):
     last_name: Mapped[str] = mapped_column(String(20))
     email: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     phone: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    birth_date: Mapped[Date] = mapped_column(Date, default=func.now(), nullable=True)
+    birth_date: Mapped[Date] = mapped_column(Date, nullable=True)
     info: Mapped[str] = mapped_column(String(100), nullable=True)
-    created_at: Mapped[Date] = mapped_column(Date, default=func.now(), nullable=True)
-    updated_at: Mapped[Date] = mapped_column(Date, default=func.now(), onupdate=func.now(), nullable=True)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), nullable=True)
+    updated_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), onupdate=func.now(), nullable=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'), nullable=True)
     user: Mapped['User'] = relationship(backref='contact', lazy='joined')
 

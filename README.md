@@ -1,6 +1,10 @@
 # About project
 Project description
 
+# Live page
+
+https://contacts-study-team.koyeb.app/
+
 # Technologies
 - FastApi
 - Postgres

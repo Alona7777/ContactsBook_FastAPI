@@ -48,7 +48,7 @@ def session():
         db.close()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="module", autouse=True)
 def client(session):
     # Dependency override
 

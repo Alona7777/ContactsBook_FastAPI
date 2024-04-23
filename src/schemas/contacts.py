@@ -21,7 +21,7 @@ class ContactBase(BaseModel):
     last_name: str = Field(max_length=20)
     email: EmailStr = Field(max_length=50)
     phone: PhoneNumber
-    birth_date: date | None
+    birth_date: date
     info: Optional[str] = None
 
 
