@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
@@ -47,6 +48,7 @@ async def create_contact(body: ContactBase, user: User, db: Session) -> Contact:
         email = body.email,
         phone = body.phone,
         birth_date = body.birth_date,
+        # birth_date = body.birth_date if body.birth_date else datetime.now().date(),
         info = body.info,
         user_id = user.id
     )

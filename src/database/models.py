@@ -1,6 +1,7 @@
 import enum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import String, Date, Integer, ForeignKey, DateTime, func, Enum, Boolean
+from src.database.db import engine
 
 
 class Base(DeclarativeBase):
@@ -13,7 +14,7 @@ class Contact(Base):
     last_name: Mapped[str] = mapped_column(String(20))
     email: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     phone: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    birth_date: Mapped[Date] = mapped_column(Date)
+    birth_date: Mapped[Date] = mapped_column(Date, default=func.now(), nullable=True)
     info: Mapped[str] = mapped_column(String(100), nullable=True)
     created_at: Mapped[Date] = mapped_column(Date, default=func.now(), nullable=True)
     updated_at: Mapped[Date] = mapped_column(Date, default=func.now(), onupdate=func.now(), nullable=True)
@@ -40,3 +41,6 @@ class User(Base):
     confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     avatar: Mapped[str] = mapped_column(String(255), nullable=True)
 
+
+# Base.metadata.create_all(engine)
+# Base.metadata.bind = engine 

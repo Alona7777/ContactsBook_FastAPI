@@ -63,6 +63,7 @@ async def create_contact(body: ContactBase, db: Session = Depends(get_db),
     :return: The contact that was created
     :doc-author: Trelent
     """
+    print(body)
     return await one_contact.create_contact(body, current_user, db)
 
 @router.put('/{contact_id}', response_model=ContactResponse)

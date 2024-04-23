@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
     DB_PORT: str
+    DB_HOST: str
  
     DB_URL: str
     SECRET_KEY: str
