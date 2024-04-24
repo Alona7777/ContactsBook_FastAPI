@@ -11,7 +11,7 @@ test_json = {
     "last_name": "string",
     "email": "user@example.com",
     "phone": "4242474890",
-    "birth_date": "2024-04-23",
+    "birth_date": "2024-11-23",
     "info": "string",
 }
 test_json_1 = {
@@ -19,10 +19,9 @@ test_json_1 = {
     "last_name": "test",
     "email": "user@example.com",
     "phone": "4242574890",
-    "birth_date": "2010-04-23",
+    "birth_date": "2010-10-23",
     "info": "string",
 }
-
 
 @pytest.fixture()
 def token(client, user, session, monkeypatch):
@@ -50,7 +49,6 @@ def test_create_contact(client, token):
             json=test_json,
             headers={"Authorization": f"Bearer {token}"},
         )
-        print(response.status_code)
         assert response.status_code == 201, response.text
         data = response.json()
         assert data["email"] == test_json.get("email")
@@ -111,17 +109,10 @@ def test_update_contact(client, token):
         r_mock.get.return_value = None
         response = client.put(
             "/api/contact/1",
-            json={
-                "first_name": "test",
-                "last_name": "test",
-                "email": "user@example.com",
-                "phone": "4242574890",
-                "birth_date": "2010-04-23",
-                "info": "string",
-            },
+            json=test_json_1,
             headers={"Authorization": f"Bearer {token}"},
         )
-        # assert response.status_code == 200, response.text
+        assert response.status_code == 200, response.text
         data = response.json()
         # assert data["email"] == test_json.get("email")
         # assert "id" in data
