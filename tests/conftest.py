@@ -17,7 +17,11 @@ engine = create_engine(
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-test_user = {"username": "deadpool", "email": "deadpool@example.com", "password": "12345678"}
+test_user = {
+    "username": "deadpool",
+    "email": "deadpool@example.com",
+    "password": "12345678",
+}
 
 
 # @pytest.fixture(scope="module", autouse=True)
@@ -35,7 +39,8 @@ test_user = {"username": "deadpool", "email": "deadpool@example.com", "password"
 
 #     asyncio.run(init_models())
 
-@pytest.fixture(scope="module")
+
+@pytest.fixture(scope="module", autouse=True)
 def session():
     # Create the database
     Base.metadata.drop_all(bind=engine)
@@ -68,6 +73,8 @@ def client(session):
 
 @pytest.fixture(scope="module")
 def user():
-    return {"username": "deadpool", "email": "deadpool@example.com", "password": "12345678"}
-
-
+    return {
+        "username": "deadpool",
+        "email": "deadpool@example.com",
+        "password": "12345678",
+    }

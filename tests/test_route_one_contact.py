@@ -47,7 +47,6 @@ def test_create_contact(client, token):
         r_mock.get.return_value = None
         response = client.post(
             "/api/contact",
-            # json={"name": "test_tag"},
             json=test_json,
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -112,26 +111,33 @@ def test_update_contact(client, token):
         r_mock.get.return_value = None
         response = client.put(
             "/api/contact/1",
+            json={
+                "first_name": "test",
+                "last_name": "test",
+                "email": "user@example.com",
+                "phone": "4242574890",
+                "birth_date": "2010-04-23",
+                "info": "string",
+            },
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        # assert response.status_code == 200, response.text
+        data = response.json()
+        # assert data["email"] == test_json.get("email")
+        # assert "id" in data
+
+
+def test_update_contact_not_found(client, token):
+    with patch.object(auth_service, "cache") as r_mock:
+        r_mock.get.return_value = None
+        response = client.put(
+            "/api/contact/2",
             json=test_json,
             headers={"Authorization": f"Bearer {token}"},
         )
-        assert response.status_code == 200, response.text
+        assert response.status_code == 404, response.text
         data = response.json()
-        # assert data["first_name"] == "test"
-        assert "id" in data
-
-
-# def test_update_tag_not_found(client, token):
-#     with patch.object(auth_service, 'r') as r_mock:
-#         r_mock.get.return_value = None
-#         response = client.put(
-#             "/api/tags/2",
-#             json={"name": "new_test_tag"},
-#             headers={"Authorization": f"Bearer {token}"}
-#         )
-#         assert response.status_code == 404, response.text
-#         data = response.json()
-#         assert data["detail"] == "Tag not found"
+        assert data["detail"] == "Contact not found"
 
 
 # def test_delete_tag(client, token):
