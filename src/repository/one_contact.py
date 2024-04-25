@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import and_
+from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
 from src.database.models import Contact, User
@@ -17,7 +17,8 @@ async def get_contact(contact_id: int, user: User, db: Session) -> Contact:
     :return: A contact object
     :doc-author: Trelent
     """
-    return db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+    return db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).one_or_none()
+
 
 async def get_contact_by_email(contact_email: str, user: User, db: Session) -> Contact:
     """
@@ -42,13 +43,14 @@ async def create_contact(body: ContactBase, user: User, db: Session) -> Contact:
     :return: The newly created contact
     :doc-author: Trelent
     """
+    # birth = datetime.strptime(body.birth_date, "%Y-%m-%d")
     contact = Contact(
         first_name = body.first_name,
         last_name = body.last_name,
         email = body.email,
         phone = body.phone,
         birth_date = body.birth_date,
-        # birth_date = body.birth_date if body.birth_date else datetime.now().date(),
+        # birth_date = birth,
         info = body.info,
         user_id = user.id
     )
@@ -72,7 +74,7 @@ async def update_contact(contact_id: int, body: ContactBase, user: User, db: Ses
     :return: The updated contact
     :doc-author: Trelent
     """
-    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).one_or_none()
     if contact:
         contact.first_name = body.first_name,
         contact.last_name = body.last_name,

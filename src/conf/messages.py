@@ -1,2 +1,5 @@
 ACCOUNT_EXIST = "Account already exists"
 EMAIL_NOT_CONFIRMED = "Email not confirmed"
+WRONG_PASSWORD = "Invalid password"
+WRONG_EMAIL = "Invalid email"
+NOT_CONTACT = "Contact not found"

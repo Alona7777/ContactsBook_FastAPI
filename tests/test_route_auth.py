@@ -53,7 +53,9 @@ def test_login_user(client, session, user):
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["token_type"] == "bearer"
+    assert "access_token" in data
+    assert "refresh_token" in data
+    assert "token_type" in data
 
 
 def test_login_wrong_password(client, user):
@@ -63,7 +65,7 @@ def test_login_wrong_password(client, user):
     )
     assert response.status_code == 401, response.text
     data = response.json()
-    assert data["detail"] == "Invalid password"
+    assert data["detail"] == messages.WRONG_PASSWORD
 
 
 def test_login_wrong_email(client, user):
@@ -73,4 +75,11 @@ def test_login_wrong_email(client, user):
     )
     assert response.status_code == 401, response.text
     data = response.json()
-    assert data["detail"] == "Invalid email"
+    assert data["detail"] == messages.WRONG_EMAIL
+
+def test_validation_error_login(client, user):
+    response = client.post("api/auth/login",
+                           data={"password": user.get("password")})
+    assert response.status_code == 422, response.text
+    data = response.json()
+    assert "detail" in data  

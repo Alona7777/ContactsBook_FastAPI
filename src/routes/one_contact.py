@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from src.database.db import get_db
 from src.database.models import User, Contact
+from src.conf import messages
 
 from src.schemas.contacts import ContactBase, ContactResponse
 from src.repository import one_contact
@@ -33,7 +34,7 @@ async def read_contact(
     contact = await one_contact.get_contact(contact_id, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -57,7 +58,7 @@ async def read_contact_by_email(
     contact = await one_contact.get_contact_by_email(email, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -102,7 +103,7 @@ async def update_contact(
     contact = await one_contact.update_contact(contact_id, body, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -129,7 +130,7 @@ async def update_name(
     contact = await one_contact.update_name(contact_id, first_name, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -160,7 +161,7 @@ async def update_last_name(
     )
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -187,7 +188,7 @@ async def update_email(
     contact = await one_contact.update_email(contact_id, email, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -215,7 +216,7 @@ async def update_phone(
     contact = await one_contact.update_phone(contact_id, phone, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -242,7 +243,7 @@ async def update_phone(
     contact = await one_contact.update_info(contact_id, info, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact
 
@@ -267,6 +268,6 @@ async def remove_contact(
     contact = await one_contact.remove_contact(contact_id, current_user, db)
     if contact is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=messages.NOT_CONTACT
         )
     return contact

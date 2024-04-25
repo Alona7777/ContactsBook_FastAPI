@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from httpx import WSGITransport
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from unittest.mock import MagicMock, patch
 from main import app
 from src.database.models import Base, User
 from src.database.db import get_db
@@ -53,22 +53,37 @@ def session():
         db.close()
 
 
-@pytest.fixture(scope="module")
-def client(session):
-    # Dependency override
+# @pytest.fixture(scope="module", autouse=True)
+# def client(session):
+#     # Dependency override
 
+#     def override_get_db():
+#         try:
+#             yield session
+#         # except Exception as err:
+#         #     print(err)
+#         #     session.rollback()
+#         finally:
+#             session.close()
+
+#     app.dependency_overrides[get_db] = override_get_db
+#     transport = WSGITransport(app=app)
+#     yield TestClient(app, base_url="http://testserver")
+
+@pytest.fixture(scope="module", autouse=True)
+def client(session):
+    # Создаем клиента с правильными зависимостями
     def override_get_db():
         try:
             yield session
-        # except Exception as err:
-        #     print(err)
-        #     session.rollback()
         finally:
             session.close()
 
     app.dependency_overrides[get_db] = override_get_db
-    transport = WSGITransport(app=app)
-    yield TestClient(app, base_url="http://testserver")
+    # Создаем тестового клиента
+    with TestClient(app, base_url="http://testserver") as client:
+        yield client
+
 
 
 @pytest.fixture(scope="module")
@@ -78,3 +93,21 @@ def user():
         "email": "deadpool@example.com",
         "password": "12345678",
     }
+
+@pytest.fixture()
+def token(client, user, session, monkeypatch):
+    mock_send_email = MagicMock()
+    monkeypatch.setattr("src.routes.auth.send_email", mock_send_email)
+    client.post("/api/auth/signup", json=user)
+    current_user: User = (
+        session.query(User).filter(User.email == user.get("email")).first()
+    )
+    current_user.confirmed = True
+    session.commit()
+    response = client.post(
+        "/api/auth/login",
+        data={"username": user.get("email"), "password": user.get("password")},
+    )
+    data = response.json()
+    return data["access_token"]
+

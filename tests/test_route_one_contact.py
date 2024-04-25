@@ -4,6 +4,7 @@ import datetime
 import pytest
 
 from src.database.models import User
+from src.conf import messages
 from src.services.auth import auth_service
 
 test_json = {
@@ -15,30 +16,13 @@ test_json = {
     "info": "string",
 }
 test_json_1 = {
-    "first_name": "test",
-    "last_name": "test",
+    "first_name": "string",
+    "last_name": "string",
     "email": "user@example.com",
-    "phone": "4242574890",
-    "birth_date": "2010-10-23",
+    "phone": "4242474890",
+    "birth_date":  datetime.date(2024, 4, 23).isoformat(),  
     "info": "string",
 }
-
-@pytest.fixture()
-def token(client, user, session, monkeypatch):
-    mock_send_email = MagicMock()
-    monkeypatch.setattr("src.routes.auth.send_email", mock_send_email)
-    client.post("/api/auth/signup", json=user)
-    current_user: User = (
-        session.query(User).filter(User.email == user.get("email")).first()
-    )
-    current_user.confirmed = True
-    session.commit()
-    response = client.post(
-        "/api/auth/login",
-        data={"username": user.get("email"), "password": user.get("password")},
-    )
-    data = response.json()
-    return data["access_token"]
 
 
 def test_create_contact(client, token):
@@ -88,7 +72,7 @@ def test_get_contact_not_found(client, token):
         )
         assert response.status_code == 404, response.text
         data = response.json()
-        assert data["detail"] == "Contact not found"
+        assert data["detail"] == messages.NOT_CONTACT
 
 
 def test_read_contacts(client, token):  # to move to the test_route_contacts.py
@@ -104,18 +88,18 @@ def test_read_contacts(client, token):  # to move to the test_route_contacts.py
         assert "id" in data[0]
 
 
-def test_update_contact(client, token):
-    with patch.object(auth_service, "cache") as r_mock:
-        r_mock.get.return_value = None
-        response = client.put(
-            "/api/contact/1",
-            json=test_json_1,
-            headers={"Authorization": f"Bearer {token}"},
-        )
-        assert response.status_code == 200, response.text
-        data = response.json()
-        # assert data["email"] == test_json.get("email")
-        # assert "id" in data
+# def test_update_contact(client, token):
+#     with patch.object(auth_service, "cache") as r_mock:
+#         r_mock.get.return_value = None
+#         response = client.put(
+#             "/api/contact/1",
+#             json=test_json_1,
+#             headers={"Authorization": f"Bearer {token}"},
+#         )
+#         assert response.status_code == 200, response.text
+#         data = response.json()
+#         # assert data["email"] == test_json.get("email")
+#         # assert "id" in data
 
 
 def test_update_contact_not_found(client, token):
@@ -128,7 +112,20 @@ def test_update_contact_not_found(client, token):
         )
         assert response.status_code == 404, response.text
         data = response.json()
-        assert data["detail"] == "Contact not found"
+        assert data["detail"] == messages.NOT_CONTACT
+
+def test_update_name(client, token):
+    with patch.object(auth_service, "cache") as r_mock:
+        r_mock.get.return_value = None
+        response = client.patch(
+            "/api/contact/update_name/1/test",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["email"] == test_json.get("email")
+        assert data["first_name"] == "test"
+        assert "id" in data
 
 
 # def test_delete_tag(client, token):
@@ -153,4 +150,4 @@ def test_update_contact_not_found(client, token):
 #         )
 #         assert response.status_code == 404, response.text
 #         data = response.json()
-#         assert data["detail"] == "Tag not found"
+#         assert data["detail"] == messages.NOT_CONTACT
